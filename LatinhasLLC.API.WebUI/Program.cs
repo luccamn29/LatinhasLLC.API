@@ -22,6 +22,8 @@ builder.Services.AddScoped<IDemandRepository, DemandRepository>();
 builder.Services.AddScoped<IDemandService, DemandService>();
 builder.Services.AddScoped<IDemandItemRepository, DemandItemRepository>();
 builder.Services.AddScoped<IDemandItemService, DemandItemService>();
+builder.Services.AddScoped<IItemRepository, ItemRepository>();
+builder.Services.AddScoped<IItemService, ItemService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
