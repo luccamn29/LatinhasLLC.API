@@ -16,13 +16,13 @@ public class DemandRepository : IDemandRepository
 
     public async Task<List<Demand>> GetAllAsync()
     {
-        return await _context.Demands.Include(d => d.Items).ToListAsync();
+        return await _context.Demands.Include(d => d.DemandItems).ThenInclude(x => x.Item).ToListAsync();
     }
 
     public async Task<Demand?> GetByIdAsync(Guid id)
     {
         return await _context.Demands
-            .Include(d => d.Items)
+            .Include(d => d.DemandItems)
             .FirstOrDefaultAsync(d => d.Id == id);
     }
 

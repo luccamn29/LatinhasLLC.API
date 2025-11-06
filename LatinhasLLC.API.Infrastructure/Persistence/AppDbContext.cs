@@ -12,18 +12,20 @@ public class AppDbContext : DbContext
 
     public DbSet<Item> Items => Set<Item>();
     public DbSet<Demand> Demands => Set<Demand>();
+    public DbSet<DemandItem> DemandItems => Set<DemandItem>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Item>()
-            .HasKey(p => p.SKU);
+        modelBuilder.Entity<DemandItem>()
+            .HasOne(di => di.Demand)
+            .WithMany(d => d.DemandItems)
+            .HasForeignKey(di => di.DemandId);
 
-        modelBuilder.Entity<Item>()
-            .HasOne(i => i.Demand)
-            .WithMany(d => d.Items)
-            .HasForeignKey(i => i.DemandId)
-            .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<DemandItem>()
+            .HasOne(di => di.Item)
+            .WithMany()
+            .HasForeignKey(di => di.SKU);
     }
 }
