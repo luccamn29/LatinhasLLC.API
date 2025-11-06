@@ -11,19 +11,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoMapper(typeof(ItemProfile).Assembly);
 
-// Criar conexão em memória e mantê-la aberta
 var keepAliveConnection = new SqliteConnection("DataSource=:memory:");
 keepAliveConnection.Open();
 
-// Registrar DbContext usando essa conexão
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(keepAliveConnection)
 );
 
 builder.Services.AddScoped<IDemandRepository, DemandRepository>();
 builder.Services.AddScoped<IDemandService, DemandService>();
+builder.Services.AddScoped<IDemandItemRepository, DemandItemRepository>();
+builder.Services.AddScoped<IDemandItemService, DemandItemService>();
 
-// Adicionar controllers e Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -40,13 +39,11 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Criar as tabelas no banco em memória
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.EnsureCreated();
 
-    // Opcional: inserir seed inicial
     if (!db.Demands.Any())
     {
         var items = new List<Item>

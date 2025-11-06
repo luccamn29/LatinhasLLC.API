@@ -15,7 +15,6 @@ public class DemandsController : ControllerBase
         _demandService = demandService;
     }
 
-    // 🔹 GET: api/demands
     [HttpGet]
     public async Task<ActionResult<List<DemandDto>>> GetAll()
     {
@@ -23,7 +22,6 @@ public class DemandsController : ControllerBase
         return Ok(demands);
     }
 
-    // 🔹 GET: api/demands/{id}
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<DemandDto>> GetById(Guid id)
     {
@@ -34,7 +32,6 @@ public class DemandsController : ControllerBase
         return Ok(demand);
     }
 
-    // 🔹 POST: api/demands
     [HttpPost]
     public async Task<ActionResult<DemandDto>> Create([FromBody] DemandDto dto)
     {
@@ -42,7 +39,6 @@ public class DemandsController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
-    // 🔹 PUT: api/demands/{id}
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] DemandDto dto)
     {
@@ -53,7 +49,6 @@ public class DemandsController : ControllerBase
         return NoContent();
     }
 
-    // 🔹 DELETE: api/demands/{id}
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
