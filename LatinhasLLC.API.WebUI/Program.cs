@@ -65,14 +65,12 @@ using (var scope = app.Services.CreateScope())
             {
                 StartDate = DateTime.UtcNow.AddDays(10),
                 EndDate = DateTime.UtcNow.AddDays(17),
-                Status = LatinhasLLC.API.Domain.Enums.DemandStatus.Planning,
                 DemandItems = new List<DemandItem>()
             },
             new()
             {
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow.AddDays(7),
-                Status = LatinhasLLC.API.Domain.Enums.DemandStatus.InProgress,
                 DemandItems = new List<DemandItem>
                 {
                     new() { SKU = "SKU001", TotalPlanned = 300, TotalProduced = 180 },
@@ -84,7 +82,6 @@ using (var scope = app.Services.CreateScope())
             {
                 StartDate = DateTime.UtcNow.AddDays(-5),
                 EndDate = DateTime.UtcNow.AddDays(2),
-                Status = LatinhasLLC.API.Domain.Enums.DemandStatus.Completed,
                 DemandItems = new List<DemandItem>
                 {
                     new() { SKU = "SKU003", TotalPlanned = 200, TotalProduced = 200 },
@@ -96,7 +93,6 @@ using (var scope = app.Services.CreateScope())
             {
                 StartDate = DateTime.UtcNow.AddDays(5),
                 EndDate = DateTime.UtcNow.AddDays(12),
-                Status = LatinhasLLC.API.Domain.Enums.DemandStatus.Planning,
                 DemandItems = new List<DemandItem>
                 {
                     new() { SKU = "SKU002", TotalPlanned = 200, TotalProduced = 0 },
