@@ -17,8 +17,8 @@ public class DemandItemRequestValidator : AbstractValidator<DemandItemRequest>
             .WithMessage("O SKU deve ter no máximo 50 caracteres.");
 
         RuleFor(x => x.TotalPlanned)
-            .GreaterThanOrEqualTo(0)
-            .WithMessage("O total planejado deve ser maior ou igual a zero.");
+            .GreaterThan(0)
+            .WithMessage("O total planejado deve ser maior que zero.");
 
         RuleFor(x => x.TotalProduced)
             .GreaterThanOrEqualTo(0)
