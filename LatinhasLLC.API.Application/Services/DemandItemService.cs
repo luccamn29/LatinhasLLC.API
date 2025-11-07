@@ -30,6 +30,12 @@ public class DemandItemService : IDemandItemService
 
     public async Task<DemandItemDto> CreateAsync(DemandItemDto dto)
     {
+        if (dto.TotalPlanned < 0)
+            throw new InvalidOperationException("A quantidade planejada não pode ser negativa.");
+
+        if (dto.TotalProduced < 0)
+            throw new InvalidOperationException("A quantidade produzida não pode ser negativa.");
+
         var entity = _mapper.Map<DemandItem>(dto);
         await _repo.AddAsync(entity);
         return _mapper.Map<DemandItemDto>(entity);
@@ -37,6 +43,12 @@ public class DemandItemService : IDemandItemService
 
     public async Task<bool> UpdateAsync(Guid id, DemandItemDto dto)
     {
+        if (dto.TotalPlanned < 0)
+            throw new InvalidOperationException("A quantidade planejada não pode ser negativa.");
+
+        if (dto.TotalProduced < 0)
+            throw new InvalidOperationException("A quantidade produzida não pode ser negativa.");
+
         var existing = await _repo.GetByIdAsync(id);
         if (existing == null) return false;
 
