@@ -30,6 +30,10 @@ public class ItemService : IItemService
 
     public async Task<ItemDto> CreateAsync(ItemDto dto)
     {
+        var existing = await _repo.GetBySKUAsync(dto.SKU);
+        if (existing != null)
+            throw new InvalidOperationException($"Já existe um item com o SKU '{dto.SKU}'.");
+
         var entity = _mapper.Map<Item>(dto);
         await _repo.AddAsync(entity);
         return _mapper.Map<ItemDto>(entity);

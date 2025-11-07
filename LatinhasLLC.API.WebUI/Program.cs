@@ -4,6 +4,7 @@ using LatinhasLLC.API.Application.Services;
 using LatinhasLLC.API.Domain.Entities;
 using LatinhasLLC.API.Infrastructure.Persistence;
 using LatinhasLLC.API.Infrastructure.Repositories;
+using LatinhasLLC.API.WebUI.Middlewares;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
@@ -114,6 +115,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthorization();

@@ -30,6 +30,9 @@ public class DemandService : IDemandService
 
     public async Task<DemandDto> CreateAsync(DemandDto dto)
     {
+        if (dto.EndDate <= dto.StartDate)
+            throw new InvalidOperationException("A data de término deve ser maior que a data de início.");
+
         var entity = _mapper.Map<Demand>(dto);
         await _repo.AddAsync(entity);
         return _mapper.Map<DemandDto>(entity);
@@ -37,6 +40,9 @@ public class DemandService : IDemandService
 
     public async Task<bool> UpdateAsync(Guid id, DemandDto dto)
     {
+        if (dto.EndDate <= dto.StartDate)
+            throw new InvalidOperationException("A data de término deve ser maior que a data de início.");
+
         var existing = await _repo.GetByIdAsync(id);
         if (existing == null) return false;
 
