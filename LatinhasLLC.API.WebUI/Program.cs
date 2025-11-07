@@ -15,13 +15,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoMapper(typeof(ItemProfile).Assembly);
 
-var keepAliveConnection = new SqliteConnection("DataSource=:memory:");
-keepAliveConnection.Open();
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(keepAliveConnection)
+var keepAliveConnection = new SqliteConnection(
+    "Data Source=:memory:;Cache=Shared;Mode=Memory;Pooling=True"
 );
 
+keepAliveConnection.Open();
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(keepAliveConnection, sqliteOptions =>
+    {
+        sqliteOptions.CommandTimeout(30);
+    })
+);
 
 builder.Services.AddValidatorsFromAssemblyContaining<DemandItemRequestValidator>();
 builder.Services.AddFluentValidationAutoValidation();

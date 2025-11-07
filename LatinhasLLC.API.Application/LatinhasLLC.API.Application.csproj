@@ -9,10 +9,6 @@
     <ProjectReference Include="..\LatinhasLLC.API.Domain\LatinhasLLC.API.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Validators\" />
-  </ItemGroup>
-
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
