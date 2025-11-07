@@ -1,5 +1,8 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using LatinhasLLC.API.Application.Interfaces;
 using LatinhasLLC.API.Application.Mappings;
+using LatinhasLLC.API.Application.Models.Demand.Requests;
 using LatinhasLLC.API.Application.Services;
 using LatinhasLLC.API.Domain.Entities;
 using LatinhasLLC.API.Infrastructure.Persistence;
@@ -18,6 +21,11 @@ keepAliveConnection.Open();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(keepAliveConnection)
 );
+
+
+builder.Services.AddValidatorsFromAssemblyContaining<DemandItemRequestValidator>();
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
 
 builder.Services.AddScoped<IDemandRepository, DemandRepository>();
 builder.Services.AddScoped<IDemandService, DemandService>();
