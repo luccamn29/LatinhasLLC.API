@@ -36,7 +36,7 @@ public class ItemsController : ControllerBase
     public async Task<ActionResult<ItemDto>> Create([FromBody] ItemDto dto)
     {
         var created = await _itemService.CreateAsync(dto);
-        return CreatedAtAction(nameof(GetById), new { id = created.SKU }, created);
+        return CreatedAtAction(nameof(GetById), new { sku = created.SKU }, created);
     }
 
     [HttpPut("{sku}")]
