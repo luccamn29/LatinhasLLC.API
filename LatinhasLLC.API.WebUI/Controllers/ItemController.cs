@@ -1,5 +1,6 @@
-﻿using LatinhasLLC.API.Application.DTOs;
-using LatinhasLLC.API.Application.Interfaces;
+﻿using LatinhasLLC.API.Application.Interfaces;
+using LatinhasLLC.API.Application.Models.Item.Requests;
+using LatinhasLLC.API.Application.Models.Item.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LatinhasLLC.API.WebUI.Controllers;
@@ -33,16 +34,16 @@ public class ItemsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ItemDto>> Create([FromBody] ItemDto dto)
+    public async Task<ActionResult<ItemDto>> Create([FromBody] ItemRequest request)
     {
-        var created = await _itemService.CreateAsync(dto);
+        var created = await _itemService.CreateAsync(request);
         return CreatedAtAction(nameof(GetById), new { sku = created.SKU }, created);
     }
 
-    [HttpPut("{sku}")]
-    public async Task<IActionResult> Update(string sku, [FromBody] ItemDto dto)
+    [HttpPut]
+    public async Task<IActionResult> Update([FromBody] ItemRequest request)
     {
-        var updated = await _itemService.UpdateAsync(sku, dto);
+        var updated = await _itemService.UpdateAsync(request);
         if (!updated)
             return NotFound();
 

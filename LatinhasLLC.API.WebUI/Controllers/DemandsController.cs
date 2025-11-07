@@ -1,5 +1,6 @@
-﻿using LatinhasLLC.API.Application.DTOs;
-using LatinhasLLC.API.Application.Interfaces;
+﻿using LatinhasLLC.API.Application.Interfaces;
+using LatinhasLLC.API.Application.Models.Demand.Requests;
+using LatinhasLLC.API.Application.Models.Demand.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LatinhasLLC.API.WebUI.Controllers;
@@ -33,16 +34,16 @@ public class DemandsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<DemandDto>> Create([FromBody] DemandDto dto)
+    public async Task<ActionResult<DemandDto>> Create([FromBody] DemandRequest request)
     {
-        var created = await _demandService.CreateAsync(dto);
+        var created = await _demandService.CreateAsync(request);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] DemandDto dto)
+    public async Task<IActionResult> Update(Guid id, [FromBody] DemandRequest request)
     {
-        var updated = await _demandService.UpdateAsync(id, dto);
+        var updated = await _demandService.UpdateAsync(id, request);
         if (!updated)
             return NotFound();
 

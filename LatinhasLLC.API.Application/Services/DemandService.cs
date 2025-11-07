@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using LatinhasLLC.API.Application.DTOs;
 using LatinhasLLC.API.Application.Interfaces;
+using LatinhasLLC.API.Application.Models.Demand.Requests;
+using LatinhasLLC.API.Application.Models.Demand.Responses;
 using LatinhasLLC.API.Domain.Entities;
 
 namespace LatinhasLLC.API.Application.Services;
@@ -28,25 +29,19 @@ public class DemandService : IDemandService
         return _mapper.Map<DemandDto?>(demand);
     }
 
-    public async Task<DemandDto> CreateAsync(DemandDto dto)
+    public async Task<DemandDto> CreateAsync(DemandRequest request)
     {
-        if (dto.EndDate <= dto.StartDate)
-            throw new InvalidOperationException("A data de término deve ser maior que a data de início.");
-
-        var entity = _mapper.Map<Demand>(dto);
+        var entity = _mapper.Map<Demand>(request);
         await _repo.AddAsync(entity);
         return _mapper.Map<DemandDto>(entity);
     }
 
-    public async Task<bool> UpdateAsync(Guid id, DemandDto dto)
+    public async Task<bool> UpdateAsync(Guid id, DemandRequest request)
     {
-        if (dto.EndDate <= dto.StartDate)
-            throw new InvalidOperationException("A data de término deve ser maior que a data de início.");
-
         var existing = await _repo.GetByIdAsync(id);
         if (existing == null) return false;
 
-        _mapper.Map(dto, existing);
+        _mapper.Map(request, existing);
         await _repo.UpdateAsync(existing);
         return true;
     }

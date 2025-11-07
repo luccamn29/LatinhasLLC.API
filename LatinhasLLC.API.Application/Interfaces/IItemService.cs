@@ -1,4 +1,5 @@
-﻿using LatinhasLLC.API.Application.DTOs;
+﻿using LatinhasLLC.API.Application.Models.Item.Requests;
+using LatinhasLLC.API.Application.Models.Item.Responses;
 
 namespace LatinhasLLC.API.Application.Interfaces;
 
@@ -6,7 +7,7 @@ public interface IItemService
 {
     Task<List<ItemDto>> GetAllAsync();
     Task<ItemDto?> GetBySKUAsync(string sku);
-    Task<ItemDto> CreateAsync(ItemDto dto);
-    Task<bool> UpdateAsync(string sku, ItemDto dto);
+    Task<ItemDto> CreateAsync(ItemRequest request);
+    Task<bool> UpdateAsync(ItemRequest request);
     Task<bool> DeleteAsync(string sku);
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using LatinhasLLC.API.Application.DTOs;
 using LatinhasLLC.API.Application.Interfaces;
+using LatinhasLLC.API.Application.Models.DemandItem.Requests;
+using LatinhasLLC.API.Application.Models.DemandItem.Responses;
 using LatinhasLLC.API.Domain.Entities;
 
 namespace LatinhasLLC.API.Application.Services;
@@ -28,31 +29,19 @@ public class DemandItemService : IDemandItemService
         return _mapper.Map<DemandItemDto?>(demandItem);
     }
 
-    public async Task<DemandItemDto> CreateAsync(DemandItemDto dto)
+    public async Task<DemandItemDto> CreateAsync(DemandItemRequest request)
     {
-        if (dto.TotalPlanned < 0)
-            throw new InvalidOperationException("A quantidade planejada não pode ser negativa.");
-
-        if (dto.TotalProduced < 0)
-            throw new InvalidOperationException("A quantidade produzida não pode ser negativa.");
-
-        var entity = _mapper.Map<DemandItem>(dto);
+        var entity = _mapper.Map<DemandItem>(request);
         await _repo.AddAsync(entity);
         return _mapper.Map<DemandItemDto>(entity);
     }
 
-    public async Task<bool> UpdateAsync(Guid id, DemandItemDto dto)
+    public async Task<bool> UpdateAsync(Guid id, DemandItemRequest request)
     {
-        if (dto.TotalPlanned < 0)
-            throw new InvalidOperationException("A quantidade planejada não pode ser negativa.");
-
-        if (dto.TotalProduced < 0)
-            throw new InvalidOperationException("A quantidade produzida não pode ser negativa.");
-
         var existing = await _repo.GetByIdAsync(id);
         if (existing == null) return false;
 
-        _mapper.Map(dto, existing);
+        _mapper.Map(request, existing);
         await _repo.UpdateAsync(existing);
         return true;
     }

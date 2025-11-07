@@ -1,4 +1,4 @@
-﻿namespace LatinhasLLC.API.Application.DTOs;
+﻿namespace LatinhasLLC.API.Application.Models.Item.Responses;
 
 public class ItemDto
 {

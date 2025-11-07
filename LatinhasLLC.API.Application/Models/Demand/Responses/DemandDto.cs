@@ -1,4 +1,6 @@
-﻿namespace LatinhasLLC.API.Application.DTOs;
+﻿using LatinhasLLC.API.Application.Models.DemandItem.Responses;
+
+namespace LatinhasLLC.API.Application.Models.Demand.Responses;
 
 public class DemandDto
 {

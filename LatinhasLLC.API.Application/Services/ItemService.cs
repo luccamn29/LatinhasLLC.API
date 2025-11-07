@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using LatinhasLLC.API.Application.DTOs;
 using LatinhasLLC.API.Application.Interfaces;
+using LatinhasLLC.API.Application.Models.Item.Requests;
+using LatinhasLLC.API.Application.Models.Item.Responses;
 using LatinhasLLC.API.Domain.Entities;
 
 namespace LatinhasLLC.API.Application.Services;
@@ -28,23 +29,19 @@ public class ItemService : IItemService
         return _mapper.Map<ItemDto?>(item);
     }
 
-    public async Task<ItemDto> CreateAsync(ItemDto dto)
+    public async Task<ItemDto> CreateAsync(ItemRequest request)
     {
-        var existing = await _repo.GetBySKUAsync(dto.SKU);
-        if (existing != null)
-            throw new InvalidOperationException($"Já existe um item com o SKU '{dto.SKU}'.");
-
-        var entity = _mapper.Map<Item>(dto);
+        var entity = _mapper.Map<Item>(request);
         await _repo.AddAsync(entity);
         return _mapper.Map<ItemDto>(entity);
     }
 
-    public async Task<bool> UpdateAsync(string sku, ItemDto dto)
+    public async Task<bool> UpdateAsync(ItemRequest request)
     {
-        var existing = await _repo.GetBySKUAsync(sku);
+        var existing = await _repo.GetBySKUAsync(request.SKU);
         if (existing == null) return false;
 
-        _mapper.Map(dto, existing);
+        _mapper.Map(request, existing);
         await _repo.UpdateAsync(existing);
         return true;
     }
