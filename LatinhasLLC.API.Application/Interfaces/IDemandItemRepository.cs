@@ -9,4 +9,5 @@ public interface IDemandItemRepository
     Task AddAsync(DemandItem demandItem);
     Task UpdateAsync(DemandItem demandItem);
     Task DeleteAsync(Guid id);
+    Task<bool> ExistsByDemandAndSkuAsync(Guid demandId, string sku, Guid? ignoreId = null);
 }

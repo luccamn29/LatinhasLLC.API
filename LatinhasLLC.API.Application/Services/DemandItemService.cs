@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FluentValidation;
+using FluentValidation.Results;
 using LatinhasLLC.API.Application.Interfaces;
 using LatinhasLLC.API.Application.Models.DemandItem.Requests;
 using LatinhasLLC.API.Application.Models.DemandItem.Responses;
@@ -31,6 +33,12 @@ public class DemandItemService : IDemandItemService
 
     public async Task<DemandItemDto> CreateAsync(DemandItemRequest request)
     {
+        var exists = await _repo.ExistsByDemandAndSkuAsync(request.DemandId, request.SKU);
+        if (exists)
+            throw new ValidationException(
+                new List<ValidationFailure> { new ValidationFailure("SKU", "Já existe um item com este SKU nesta demanda.") }
+            );
+
         var entity = _mapper.Map<DemandItem>(request);
         await _repo.AddAsync(entity);
         return _mapper.Map<DemandItemDto>(entity);
@@ -40,6 +48,13 @@ public class DemandItemService : IDemandItemService
     {
         var existing = await _repo.GetByIdAsync(id);
         if (existing == null) return false;
+
+        var skuExists = await _repo.ExistsByDemandAndSkuAsync(request.DemandId, request.SKU, id);
+
+        if (skuExists)
+            throw new ValidationException(
+                new List<ValidationFailure> { new ValidationFailure("SKU", "Já existe um item com este SKU nesta demanda.") }
+            );
 
         _mapper.Map(request, existing);
         await _repo.UpdateAsync(existing);

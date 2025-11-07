@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FluentValidation;
+using FluentValidation.Results;
 using LatinhasLLC.API.Application.Interfaces;
 using LatinhasLLC.API.Application.Models.Item.Requests;
 using LatinhasLLC.API.Application.Models.Item.Responses;
@@ -31,6 +33,14 @@ public class ItemService : IItemService
 
     public async Task<ItemDto> CreateAsync(ItemRequest request)
     {
+        var skuCadastrado = await GetBySKUAsync(request.SKU) ;
+
+        if (skuCadastrado != null)
+            throw new ValidationException(new List<ValidationFailure>
+            {
+                new ValidationFailure("SKU", "Já existe um item com este SKU nesta demanda.")
+            });
+
         var entity = _mapper.Map<Item>(request);
         await _repo.AddAsync(entity);
         return _mapper.Map<ItemDto>(entity);

@@ -49,4 +49,12 @@ public class DemandItemRepository : IDemandItemRepository
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task<bool> ExistsByDemandAndSkuAsync(Guid demandId, string sku, Guid? ignoreId = null)
+    {
+        return await _context.DemandItems
+            .AnyAsync(di => di.DemandId == demandId
+                         && di.SKU == sku
+                         && (!ignoreId.HasValue || di.Id != ignoreId.Value));
+    }
 }

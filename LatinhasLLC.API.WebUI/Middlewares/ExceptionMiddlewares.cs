@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
+using FluentValidation;
 
 namespace LatinhasLLC.API.WebUI.Middlewares;
 
@@ -30,18 +31,40 @@ public class ExceptionMiddleware
     {
         context.Response.ContentType = "application/json";
 
-        HttpStatusCode status = ex switch
-        {
-            InvalidOperationException => HttpStatusCode.BadRequest,
-            KeyNotFoundException => HttpStatusCode.NotFound,
-            _ => HttpStatusCode.InternalServerError
-        };
+        HttpStatusCode status;
+        object response;
 
-        var response = new
+        switch (ex)
         {
-            message = ex.Message,
-            statusCode = (int)status
-        };
+            case ValidationException validationEx:
+                status = HttpStatusCode.BadRequest;
+                response = new
+                {
+                    message = "Erro de validação",
+                    statusCode = (int)status,
+                    errors = validationEx.Errors.Select(e => new
+                    {
+                        propertyName = e.PropertyName,
+                        errorMessage = e.ErrorMessage
+                    })
+                };
+                break;
+
+            case InvalidOperationException:
+                status = HttpStatusCode.BadRequest;
+                response = new { message = ex.Message, statusCode = (int)status };
+                break;
+
+            case KeyNotFoundException:
+                status = HttpStatusCode.NotFound;
+                response = new { message = ex.Message, statusCode = (int)status };
+                break;
+
+            default:
+                status = HttpStatusCode.InternalServerError;
+                response = new { message = ex.Message, statusCode = (int)status };
+                break;
+        }
 
         logger.LogError(ex, "Erro inesperado: {Message}", ex.Message);
 
